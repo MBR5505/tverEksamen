@@ -5,6 +5,11 @@ const jwt = require('jsonwebtoken');
 const login = async (req, res) => {
     try {
         const { username, password } = req.body;
+        
+        if (!username || !password) {
+            return res.status(400).json({ message: 'Username and password required' });
+        }
+
         const user = await User.findOne({ username });
         
         if (!user || !(await argon2.verify(user.password, password))) {
@@ -17,7 +22,15 @@ const login = async (req, res) => {
             { expiresIn: '24h' }
         );
 
-        res.json({ token });
+        // Set token in cookie
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        });
+
+        res.json({ message: 'Logged in successfully' });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
