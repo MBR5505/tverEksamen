@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { protect, adminOnly, isOwnerOrAdmin } = require('../middleware/authMiddleware');
-const { login } = require('../controllers/authController');
+const { login, logout } = require('../controllers/authController');
 const {
     createUser,
     getUser,
@@ -11,6 +11,7 @@ const {
 } = require('../controllers/userController');
 
 router.post('/login', login);
+router.post('/logout', protect, logout);
 router.post('/', createUser);
 router.get('/:username', protect, getUser);
 router.get('/', protect, getAllUsers);
