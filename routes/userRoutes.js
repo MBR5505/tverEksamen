@@ -1,24 +1,17 @@
 const express = require('express');
 const router = express.Router();
+const {
+    createUser,
+    getUser,
+    getAllUsers,
+    updateUser,
+    deleteUser
+} = require('../controllers/userController');
 
-router.post('/', (req, res) => {
-    res.status(501).json({ message: 'Create user - Not implemented' });
-});
-
-router.get('/:username', (req, res) => {
-    res.status(501).json({ message: 'Get user - Not implemented' });
-});
-
-router.get('/', (req, res) => {
-    res.status(501).json({ message: 'Get all users - Not implemented' });
-});
-
-router.put('/:username', (req, res) => {
-    res.status(501).json({ message: 'Update user - Not implemented' });
-});
-
-router.delete('/:username', (req, res) => {
-    res.status(501).json({ message: 'Delete user - Not implemented' });
-});
+router.post('/', createUser);
+router.get('/:username', getUser);
+router.get('/', getAllUsers);
+router.put('/:username', updateUser);
+router.delete('/:username', deleteUser);
 
 module.exports = router;
