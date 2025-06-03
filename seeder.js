@@ -12,7 +12,7 @@ const adminConfig = {
     production: {
         username: process.env.ADMIN_USERNAME,
         email: process.env.ADMIN_EMAIL,
-        password: process.env.ADMIN_PASSWORD 
+        password: process.env.ADMIN_PASSWORD
     }
 };
 
@@ -23,17 +23,43 @@ const seedAdmin = async () => {
         const environment = process.env.NODE_ENV || 'development';
         const config = adminConfig[environment];
         
-        await User.deleteOne({ username: config.username });
-
-        const hashedPassword = await argon2.hash(config.password);
-        await User.create({
-            username: config.username,
-            email: config.email,
-            password: hashedPassword,
-            isAdmin: true
+        console.log(`Seeding in ${environment} mode`);
+        console.log(`Using username: ${config.username}`);
+        
+        // Check if user exists
+        const existingUser = await User.findOne({ 
+            $or: [
+                { username: config.username },
+                { email: config.email }
+            ]
         });
 
-        console.log(`Admin user seeded successfully in ${environment} mode`);
+        const hashedPassword = await argon2.hash(config.password);
+
+        if (existingUser) {
+            // Update existing user
+            await User.findByIdAndUpdate(existingUser._id, {
+                username: config.username,
+                email: config.email,
+                password: hashedPassword,
+                isAdmin: true
+            });
+            console.log('Admin user updated successfully');
+        } else {
+            // Create new user
+            await User.create({
+                username: config.username,
+                email: config.email,
+                password: hashedPassword,
+                isAdmin: true
+            });
+            console.log('Admin user created successfully');
+        }
+
+        console.log('You can now login with:');
+        console.log(`Username: ${config.username}`);
+        console.log(`Password: ${config.password}`);
+        
         process.exit();
     } catch (error) {
         console.error('Error seeding admin:', error);

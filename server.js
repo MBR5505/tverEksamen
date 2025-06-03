@@ -11,15 +11,10 @@ const app = express();
 // Security middleware
 app.use(helmet());
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production' 
-        ? 'https://eksamen.succubus.ikt-fag.no'
-        : 'http://localhost:3000',
+    origin: true, // Allow all origins temporarily for testing
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    exposedHeaders: ['Set-Cookie'],
-    sameSite: 'none',
-    secure: process.env.NODE_ENV === 'production'
 }));
 
 // Basic middleware
