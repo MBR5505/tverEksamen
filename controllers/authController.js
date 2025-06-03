@@ -34,8 +34,6 @@ const login = async (req, res) => {
             maxAge: 24 * 60 * 60 * 1000
         });
 
-        console.log('Cookie set:', token); // Add debug log
-
         res.json({ message: 'Logged in successfully' });
     } catch (error) {
         console.error('Login error:', error);
