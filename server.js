@@ -8,6 +8,9 @@ const helmet = require('helmet');
 
 const app = express();
 
+// Trust proxy - add this before other middleware
+app.set('trust proxy', 1);
+
 // Security middleware
 app.use(helmet());
 app.use(cors({
