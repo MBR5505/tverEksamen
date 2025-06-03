@@ -25,8 +25,9 @@ const login = async (req, res) => {
         // Set token in cookie
         res.cookie('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
+            secure: process.env.NODE_ENV === 'production', // Only send cookie over HTTPS in production
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            domain: process.env.NODE_ENV === 'production' ? '.succubus.ikt-fag.no' : 'localhost',
             maxAge: 24 * 60 * 60 * 1000 // 24 hours
         });
 

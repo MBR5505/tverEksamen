@@ -4,15 +4,26 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
+const helmet = require('helmet');
 
 const app = express();
 
-// Import routes
-const userRoutes = require('./routes/userRoutes');
+// Security middleware
+app.use(helmet());
+app.use(cors({
+    origin: process.env.NODE_ENV === 'production' 
+        ? 'https://eksamen.succubus.ikt-fag.no'
+        : 'http://localhost:3000',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Set-Cookie'],
+    sameSite: 'none',
+    secure: process.env.NODE_ENV === 'production'
+}));
 
-// Middleware
+// Basic middleware
 app.use(express.json());
-app.use(cors({ credentials: true, origin: true }));
 app.use(cookieParser());
 app.use(morgan('dev'));
 
@@ -28,6 +39,8 @@ app.use((err, req, res, next) => {
 // View engine
 app.set('view engine', 'ejs');
 
+// Import routes
+const userRoutes = require('./routes/userRoutes');
 // Routes
 app.use('/api/users', userRoutes);
 
