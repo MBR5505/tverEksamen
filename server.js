@@ -14,13 +14,11 @@ app.set('trust proxy', 'loopback');
 // Security middleware
 app.use(helmet());
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production'
-        ? ['https://eksamen.succubus.ikt-fag.no', 'http://eksamen.succubus.ikt-fag.no']
-        : 'http://localhost:3000',
+    origin: true,  // Allow all origins temporarily
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    exposedHeaders: ['set-cookie']
+    exposedHeaders: ['Set-Cookie', 'set-cookie']
 }));
 
 // Basic middleware
