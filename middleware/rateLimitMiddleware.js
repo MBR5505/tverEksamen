@@ -6,7 +6,9 @@ const strictLimiter = rateLimit({
     message: 'For mange forespørsler for denne operasjonen, prøv igjen senere',
     standardHeaders: true,
     legacyHeaders: false,
-    trustProxy: true
+    keyGenerator: (req) => {
+        return req.ip // Will use X-Forwarded-For from trusted proxy
+    }
 });
 
 const standardLimiter = rateLimit({
@@ -15,7 +17,9 @@ const standardLimiter = rateLimit({
     message: 'For mange forespørsler, prøv igjen senere',
     standardHeaders: true,
     legacyHeaders: false,
-    trustProxy: true
+    keyGenerator: (req) => {
+        return req.ip // Will use X-Forwarded-For from trusted proxy
+    }
 });
 
 module.exports = { strictLimiter, standardLimiter };

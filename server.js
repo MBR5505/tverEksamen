@@ -8,8 +8,8 @@ const helmet = require('helmet');
 
 const app = express();
 
-// Trust proxy - expand settings
-app.set('trust proxy', true);
+// Trust only our nginx proxy
+app.set('trust proxy', 'loopback');
 
 // Security middleware
 app.use(helmet());
