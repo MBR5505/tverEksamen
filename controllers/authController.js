@@ -28,10 +28,11 @@ const login = async (req, res) => {
 
         res.cookie('token', token, {
             httpOnly: true,
-            secure: true, // Always use secure in production
-            sameSite: 'none',
-            maxAge: 24 * 60 * 60 * 1000,
-            path: '/'
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            domain: process.env.NODE_ENV === 'production' ? 'succubus.ikt-fag.no' : 'localhost',
+            path: '/',
+            maxAge: 24 * 60 * 60 * 1000
         });
 
         res.json({ message: 'Logged in successfully' });

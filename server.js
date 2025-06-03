@@ -8,16 +8,19 @@ const helmet = require('helmet');
 
 const app = express();
 
-// Trust proxy - add this before other middleware
-app.set('trust proxy', 1);
+// Trust proxy - expand settings
+app.set('trust proxy', true);
 
 // Security middleware
 app.use(helmet());
 app.use(cors({
-    origin: true, // Allow all origins temporarily for testing
+    origin: process.env.NODE_ENV === 'production'
+        ? ['https://eksamen.succubus.ikt-fag.no', 'http://eksamen.succubus.ikt-fag.no']
+        : 'http://localhost:3000',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['set-cookie']
 }));
 
 // Basic middleware
