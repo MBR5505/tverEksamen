@@ -28,11 +28,13 @@ const login = async (req, res) => {
 
         res.cookie('token', token, {
             httpOnly: true,
-            secure: true,
-            sameSite: 'none',
-            maxAge: 24 * 60 * 60 * 1000,
-            path: '/'
+            secure: false, // Set to false for http testing
+            sameSite: 'lax',
+            path: '/',
+            maxAge: 24 * 60 * 60 * 1000
         });
+
+        console.log('Cookie set:', token); // Add debug log
 
         res.json({ message: 'Logged in successfully' });
     } catch (error) {
