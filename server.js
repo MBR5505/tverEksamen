@@ -40,11 +40,10 @@ app.use((err, req, res, next) => {
     });
 });
 
-// View engine
 app.set('view engine', 'ejs');
 
-// Import routes
 const userRoutes = require('./routes/userRoutes');
+
 // Routes
 app.use('/api/users', userRoutes);
 
